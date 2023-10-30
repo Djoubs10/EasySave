@@ -62,12 +62,12 @@ namespace EasySave.Models
             while (Progress < 100)
             {
                 Thread.Sleep(rnd.Next(500, 2000));
+                _pause.WaitOne();
                 if (_token.Token.IsCancellationRequested)
                 {
                     Finish(true);
                     return;
                 }
-                _pause.WaitOne();
                 int rand = rnd.Next(1, 25);
                 if (Progress + rand > 100)
                     Progress = 100;
