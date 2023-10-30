@@ -1,6 +1,7 @@
 ﻿using EasySave.Helpers;
 using System;
 using System.Threading;
+using System.Windows.Controls;
 
 namespace EasySave.Models
 {
@@ -17,10 +18,14 @@ namespace EasySave.Models
     {
         private int _progress;
         private States _state;
+        private string _name, _target, _source;
         private CancellationTokenSource _token;
         private ManualResetEvent _pause;
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
+        public string Source { get => _source; set { _source = value; OnPropertyChanged(); } }
+        public string Target { get => _target; set { _target = value; OnPropertyChanged(); } }
+
         public int Progress
         {
             get => _progress;
@@ -30,12 +35,11 @@ namespace EasySave.Models
             get => _state;
             set { _state = value; OnPropertyChanged();}
         }
-        public Transfer( string name)
+        public Transfer( string name, string source, string target)
         {
             Id = Guid.NewGuid().ToString();
-            Name = name;
-            Progress = 0;
-            _state = States.Ready;
+            _name = name; _source = source; _target = target; Progress = 0;
+            _state = States.Ready; 
             _token = new CancellationTokenSource(); 
             _pause = new ManualResetEvent(true);
         }

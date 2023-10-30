@@ -5,6 +5,8 @@
     xmlns:customs="clr-namespace:EasySave.Customs">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Styles/Buttons.xaml"/>
+        <ResourceDictionary Source="/Styles/TextBoxes.xaml"/>
+        <ResourceDictionary Source="/Styles/TextBlocks.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <converters:StateToCanPlayConverter x:Key="StateToCanPlayConverter"/>
     <converters:StateToCanPauseConverter x:Key="StateToCanPauseConverter"/>
@@ -25,7 +27,7 @@
                         Background="#2C2D30">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="0.8*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
@@ -36,32 +38,50 @@
                             <Grid
                                 VerticalAlignment="Center">
                                 <TextBlock
-                                    FontSize="20" FontWeight="Bold" Foreground="White"
+                                    Style="{StaticResource BoldTextBlock}"
                                     Text="{Binding Name}"/>
                                 <TextBox 
+                                    Style="{StaticResource BasicTextBox}"
                                     Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}" 
                                     Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
 
-                            <Grid
+                            <StackPanel
                                 VerticalAlignment="Center"
+                                Orientation="Horizontal"
                                 Grid.Column="1">
-                                <TextBlock 
-                                    Text="Source"/>
-                                <TextBox
-                                    Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}" 
-                                    Text="Source"/>
-                            </Grid>
+                                <TextBlock
+                                    Style="{StaticResource BoldTextBlock}"
+                                    Text="Source : "/>
+                                <Grid>
+                                    <TextBlock 
+                                        Style="{StaticResource TextBlock}"
+                                        Text="{Binding Source}"/>
+                                    <TextBox
+                                        Style="{StaticResource BasicTextBox}"
+                                        Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}" 
+                                        Text="{Binding Source, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </StackPanel>
 
-                            <Grid 
+                            <StackPanel
                                 VerticalAlignment="Center"
+                                Orientation="Horizontal"
                                 Grid.Column="2">
                                 <TextBlock
-                                    Text="Target"/>
-                                <TextBlock
-                                    Text="Target"
-                                    Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}" />
-                            </Grid>
+                                    Style="{StaticResource BoldTextBlock}"
+                                    Text="Target : "/>
+                                <Grid>
+                                    <TextBlock 
+                                        Style="{StaticResource TextBlock}"
+                                        Text="{Binding Target}"/>
+                                    <TextBox
+                                        Style="{StaticResource BasicTextBox}"
+                                        Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}" 
+                                        Text="{Binding Target, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </StackPanel>
+
 
                             <StackPanel 
                                 Visibility="{Binding State, Converter={StaticResource StateToDisplayProgressConverter}}"
