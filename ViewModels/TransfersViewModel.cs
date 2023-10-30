@@ -12,6 +12,14 @@ namespace EasySave.ViewModels
     public class TransfersViewModel : BaseViewModel
     {
         private ObservableCollection<Transfer> _transfers;
+        private ObservableCollection<Transfer> _filteredTransfers;
+        private string _search = "";
+        public string Search { get => _search; set { _search = value; OnPropertyChanged(); LoadTransfers(); } }
+        public ObservableCollection<Transfer> FilteredTransfers
+        {
+            get => _filteredTransfers;
+            set { _filteredTransfers = value; OnPropertyChanged(); }
+        }
         public ObservableCollection<Transfer> Transfers { get => _transfers; set {  _transfers = value; OnPropertyChanged(); } }
         public ICommand StartTransferCommand { get; }
         public ICommand CancelTransferCommand { get; }
@@ -19,7 +27,7 @@ namespace EasySave.ViewModels
         public ICommand PauseTransferCommand { get; }
         public ICommand ResumeTransferCommand { get; }
         public ICommand ModifyTransferCommand { get; }
-        public ICommand SaveTransferCommand { get; }
+        public ICommand SaveTransferCommand { get; }    
         private void StartTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
@@ -71,6 +79,19 @@ namespace EasySave.ViewModels
             }
             return false;
         }
+
+        private void LoadTransfers()
+        {
+            if(Search == "")
+            {
+                FilteredTransfers = Transfers;
+                return;
+            }
+            FilteredTransfers = new ObservableCollection<Transfer>(Transfers.Where((t) =>
+                t.Name.Contains(Search)
+            ));
+        }
+
         public TransfersViewModel()
         {
             _transfers = new ObservableCollection<Transfer>()
@@ -78,6 +99,7 @@ namespace EasySave.ViewModels
                 new Transfer("Transfer 1","",""),
                 new Transfer("Transfer 2","","")
             };
+            _filteredTransfers = _transfers;
             StartTransferCommand = new RelayCommand(StartTransfer);
             CancelTransferCommand = new RelayCommand(CancelTransfer);
             DeleteTransferCommand = new RelayCommand(DeleteTransfer);
