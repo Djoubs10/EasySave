@@ -2,74 +2,175 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style
-        x:Key="BaseButton"
+        x:Key="PlayButton"
         TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate 
-                    TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type Button}">
                     <Border
+                        Background="#34D01B"
                         Cursor="Hand"
-                        Background="{TemplateBinding Background}"
                         Height="50" Width="50"
-                        Padding="0"
                         CornerRadius="50">
-                        <ContentPresenter 
-                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="28" Margin="4 2 0 0"
+                            Source="/Images/play_icon.png"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style 
-        x:Key="StartButton2"
-        TargetType="{x:Type Button}"
-        BasedOn="{StaticResource BaseButton}">
-        <Setter Property="Background" Value="Green"/>
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="Width" Value="50"/>
+    <Style
+        x:Key="PauseButton"
+        TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Viewbox Stretch="Fill" Width="{TemplateBinding Width}">
-                        <Grid >
-                            <Path 
-                                
-                                Width="30" Height="30"
-                                Data="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z" 
-                                Fill="Red"/>
-                        </Grid>
-                    </Viewbox>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Background="#E5D755"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="30"
+                            Source="/Images/pause_icon.png"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="ModifyButton"
+        TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Background="#E5D755"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="25" Height="25"
+                            Source="/Images/modify_icon.png"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
     <Style
-        x:Key="StartButton"
+        x:Key="RedCancelButton"
         TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate 
-             TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type Button}">
                     <Border
-                         Cursor="Hand"
-                         Background="Green"
-                         Height="50" Width="50"
-                         Padding="0"
-                         CornerRadius="50">
-                        <Viewbox Stretch="Fill">
-                            <Grid >
-                                <Path 
-                                    Data="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z" Fill="Red"/>
-                                <Path
-                                    Data="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z" Fill="Red"/>
-                            </Grid>
-                        </Viewbox>
+                        Background="#E14747"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="45" Height="45"
+                            Source="/Images/cross_icon.png"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
+    <Style
+        x:Key="GreyCancelButton"
+        TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Background="#D9D9D9"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="45" Height="45"
+                            Source="/Images/cross_icon.png"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        x:Key="DeleteButton"
+        TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Background="#E14747"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="30" Height="30"
+                            Source="/Images/delete_icon.png"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        x:Key="SaveButton"
+        TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Name="border"
+                        Background="#A3D6FD"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="30" Height="30"
+                            Source="/Images/save_icon.png"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" TargetName="border" Value="#D9D9D9"/>
+                            <Setter Property="Cursor" TargetName="border" Value="No"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="PlusButton"
+        TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Background="#A3D6FD"
+                        Cursor="Hand"
+                        Height="50" Width="50"
+                        CornerRadius="50">
+                        <Image 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Width="30" Height="30"
+                            Source="/Images/plus_icon.png"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

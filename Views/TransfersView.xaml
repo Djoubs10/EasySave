@@ -4,16 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Background="Transparent"
-             xmlns:local="clr-namespace:EasySave.Views">
-    <Grid>
+             xmlns:customs="clr-namespace:EasySave.Customs">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/Styles/TextBoxes.xaml"/>
+    </UserControl.Resources>
+    <StackPanel>
+        <TextBox
+            Style="{StaticResource SearchTextBox}"
+            Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <ItemsControl
-            ItemsSource="{Binding Transfers}">
+            ItemsSource="{Binding FilteredTransfers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock 
-                        Text="{Binding Name}"/>
+                    <customs:TransferControl
+                        StartCommand="{Binding DataContext.StartTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        CancelCommand="{Binding DataContext.CancelTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        PauseCommand="{Binding DataContext.PauseTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        ResumeCommand="{Binding DataContext.ResumeTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        ModifyCommand="{Binding DataContext.ModifyTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        SaveModificationCommand="{Binding DataContext.SaveTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        DeleteCommand="{Binding DataContext.DeleteTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                        Transfer="{Binding}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Grid>
+    </StackPanel>
 </UserControl>

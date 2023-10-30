@@ -1,14 +1,10 @@
-﻿using System.ComponentModel;
+﻿using EasySave.Helpers;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace EasySave.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : Notify 
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
