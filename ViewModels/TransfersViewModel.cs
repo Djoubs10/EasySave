@@ -62,7 +62,10 @@ namespace EasySave.ViewModels
         private void ModifyTransfer(object? parameter)
         {
             if (parameter is Transfer transfer)
+            {
                 transfer.State = States.Modifying;
+                LoadTransfers();
+            }
         }
         private void SaveTransfer(object? parameter)
         {

@@ -3,20 +3,54 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             Width="1275" Height="1024"
              Background="Transparent"
+             Padding="30"
              xmlns:customs="clr-namespace:EasySave.Customs">
     <UserControl.Resources>
-        <ResourceDictionary Source="/Styles/TextBoxes.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="/Styles/TextBoxes.xaml"/>
+                <ResourceDictionary Source="/Styles/TextBlocks.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
-        <TextBox
-            Style="{StaticResource SearchTextBox}"
-            Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    <StackPanel >
+        <TextBlock
+            Style="{StaticResource PageTitle}"
+            Text="Dashboard"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox
+                HorizontalAlignment="Left"
+                Style="{StaticResource SearchTextBox}"
+                Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel 
+                Grid.Column="1"
+                Orientation="Horizontal">
+                <Button
+                    Margin="25"
+                    Style="{StaticResource PlayButton}"/>
+                <Button
+                    Margin="25"
+                    Style="{StaticResource PlusButton}"/>
+                <Button
+                    Margin="25"
+                    Style="{StaticResource RedCancelButton}"/>
+            </StackPanel>
+        </Grid>
+        
         <ItemsControl
             ItemsSource="{Binding FilteredTransfers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <customs:TransferControl
+                        Margin="0 20"
                         StartCommand="{Binding DataContext.StartTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                         CancelCommand="{Binding DataContext.CancelTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                         PauseCommand="{Binding DataContext.PauseTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
