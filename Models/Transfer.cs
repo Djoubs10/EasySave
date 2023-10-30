@@ -37,22 +37,23 @@ namespace EasySave.Models
             Progress = 0;
             _state = States.Ready;
             _token = new CancellationTokenSource(); 
-            _pause = new ManualResetEvent(false);
+            _pause = new ManualResetEvent(true);
         }
         public void Cancel()
         {
             State = States.Canceled;
+            _pause.Set();
             _token.Cancel();
         }
         public void Pause()
         {
             State = States.Paused;
-            _pause.Set();
+            _pause.Reset();
         }
         public void Resume()
         {
             State = States.Trasfering;
-            _pause.Reset();
+            _pause.Set();
         }
         public void Start()
         {
@@ -60,6 +61,7 @@ namespace EasySave.Models
             Random rnd = new Random();
             while (Progress < 100)
             {
+                Thread.Sleep(rnd.Next(500, 2000));
                 if (_token.Token.IsCancellationRequested)
                 {
                     Finish(true);
@@ -71,20 +73,14 @@ namespace EasySave.Models
                     Progress = 100;
                 else 
                     Progress += rand;
-                Thread.Sleep(rnd.Next(500, 2000));
             }
             Finish();
         }
         public void Finish(bool canceled = false)
         {
-            if (canceled)
-            {
-                State = States.Canceled;
-                _token = new CancellationTokenSource();
-            }
-            else
-                State = States.Finished;
-            _pause = new ManualResetEvent(false);
+            State = canceled ? States.Canceled : States.Finished;
+            _token = new CancellationTokenSource();
+            _pause = new ManualResetEvent(true);
             Thread.Sleep(1000);
             Progress = 0;
             State = States.Ready;

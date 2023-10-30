@@ -13,7 +13,6 @@ namespace EasySave.Customs
             set { SetValue(StartCommandProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for StartCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StartCommandProperty =
             DependencyProperty.Register("StartCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
 
@@ -23,9 +22,27 @@ namespace EasySave.Customs
             set { SetValue(CancelCommandProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for StartCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CancelCommandProperty =
             DependencyProperty.Register("CancelCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
+
+
+        public ICommand PauseCommand
+        {
+            get { return (ICommand)GetValue(PauseCommandProperty); }
+            set { SetValue(PauseCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty PauseCommandProperty =
+            DependencyProperty.Register("PauseCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
+
+        public ICommand ResumeCommand
+        {
+            get { return (ICommand)GetValue(ResumeCommandProperty); }
+            set { SetValue(ResumeCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty ResumeCommandProperty =
+            DependencyProperty.Register("ResumeCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
 
 
         public Transfer Transfer
@@ -34,7 +51,6 @@ namespace EasySave.Customs
             set { SetValue(TransferProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Transfer.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TransferProperty =
             DependencyProperty.Register("Transfer", typeof(Transfer), typeof(TransferControl), new PropertyMetadata(null));
 

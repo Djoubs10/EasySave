@@ -13,6 +13,7 @@
     <converters:StateToCanSaveOrCancelModificationConverter x:Key="StateToCanSaveOrCancelModificationConverter"/>
     <converters:StateToForegroundProgressColor x:Key="StateToForegroundProgressColor"/>
     <converters:StateToDisplayProgressConverter x:Key="StateToDisplayProgressConverter"/>
+    <converters:StateToCanResumeTransferConverter x:Key="StateToCanResumeTransferConverter"/>
     <Style TargetType="{x:Type customs:TransferControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -113,8 +114,16 @@
                                 <Grid Margin="5 0">
                                     <!-- Pause button -->
                                     <Button
+                                        Command="{Binding PauseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
+                                        CommandParameter="{Binding}"
                                         Visibility="{Binding State, Converter={StaticResource StateToCanPauseConverter}}"
                                         Style="{StaticResource PauseButton}"/>
+                                    <!-- Resume button-->
+                                    <Button 
+                                        Command="{Binding ResumeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Visibility="{Binding State, Converter={StaticResource StateToCanResumeTransferConverter}}"
+                                        Style="{StaticResource PlayButton}"/>
                                     <!-- Modify button -->
                                     <Button
                                         Visibility="{Binding State, Converter={StaticResource StateToCanModifyOrDeleteTransferConverter}}"

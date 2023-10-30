@@ -15,6 +15,8 @@ namespace EasySave.ViewModels
         public ICommand StartTransferCommand { get; }
         public ICommand CancelTransferCommand { get; }
         public ICommand DeleteTransferCommand { get; }
+        public ICommand PauseTransferCommand { get; }
+        public ICommand ResumeTransferCommand { get; }
         private void StartTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
@@ -23,17 +25,15 @@ namespace EasySave.ViewModels
                 t.Start();
             }
         }
-        private void ModifyTransfer(object? parameter)
+        private void PauseTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
-            {
-                transfer.State = States.Modifying;
-            }
+                transfer.Pause();
         }
-        private void SaveModification(object? parameter)
+        private void ResumeTransfer(object? parameter)
         {
             if (parameter is Transfer transfer)
-                transfer.State = States.Ready;
+                transfer.Resume();
         }
         private void DeleteTransfer(object? parameter)
         {
@@ -56,6 +56,8 @@ namespace EasySave.ViewModels
             StartTransferCommand = new RelayCommand(StartTransfer);
             CancelTransferCommand = new RelayCommand(CancelTransfer);
             DeleteTransferCommand = new RelayCommand(DeleteTransfer);
+            PauseTransferCommand = new RelayCommand(PauseTransfer);
+            ResumeTransferCommand = new RelayCommand(ResumeTransfer);   
         }
 
     }
