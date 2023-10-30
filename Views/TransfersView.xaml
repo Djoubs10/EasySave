@@ -28,19 +28,21 @@
             </Grid.ColumnDefinitions>
             <TextBox
                 HorizontalAlignment="Left"
-                Style="{StaticResource SearchTextBox}"
+                Style="{StaticResource SearchTextBox}" 
                 Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel 
                 Grid.Column="1"
                 Orientation="Horizontal">
                 <Button
                     Margin="25"
+                    Command="{Binding StartAllTransfersCommand}"
                     Style="{StaticResource PlayButton}"/>
                 <Button
                     Margin="25"
                     Style="{StaticResource PlusButton}"/>
                 <Button
                     Margin="25"
+                    Command="{Binding CancelAllTransfersCommand}"
                     Style="{StaticResource RedCancelButton}"/>
             </StackPanel>
         </Grid>
