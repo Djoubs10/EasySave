@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Background="Transparent"
-             xmlns:local="clr-namespace:EasySave.Views">
+             xmlns:customs="clr-namespace:EasySave.Customs">
     <Grid>
         <ItemsControl
             ItemsSource="{Binding Transfers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock 
-                        Text="{Binding Name}"/>
+                    <customs:TransferControl 
+                        Transfer="{Binding}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
