@@ -29,6 +29,8 @@ namespace EasySave.ViewModels
         public ICommand ResumeTransferCommand { get; }
         public ICommand ModifyTransferCommand { get; }
         public ICommand SaveTransferCommand { get; }    
+        public ICommand StartAllTransfersCommand { get; }    
+        public ICommand CancelAllTransfersCommand { get; }    
         private void StartTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
@@ -96,6 +98,23 @@ namespace EasySave.ViewModels
                 t.Name.ToLower().Contains(Search.ToLower())
             ));
         }
+        public void StartAllTransfers(object? _)
+        {
+            foreach(Transfer t in FilteredTransfers)
+            {
+                if(t.State == States.Ready)
+                    new Thread(t.Start).Start();
+            }
+        }
+
+        public void CancelAllTransfers(object? _)
+        {
+            foreach(Transfer t in FilteredTransfers)
+            {
+                if (t.State != States.Ready)
+                    t.Cancel();
+            }
+        }
 
         public TransfersViewModel()
         {
@@ -112,6 +131,8 @@ namespace EasySave.ViewModels
             ResumeTransferCommand = new RelayCommand(ResumeTransfer);
             ModifyTransferCommand = new RelayCommand(ModifyTransfer);
             SaveTransferCommand = new RelayCommand(SaveTransfer, CanSaveTransfer);
+            StartAllTransfersCommand = new RelayCommand(StartAllTransfers);
+            CancelAllTransfersCommand = new RelayCommand(CancelAllTransfers);
         }
 
     }
