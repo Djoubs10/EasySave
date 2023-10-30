@@ -61,6 +61,14 @@ namespace EasySave.Customs
 
         public static readonly DependencyProperty SaveModificationCommandProperty =
             DependencyProperty.Register("SaveModificationCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
+        public ICommand DeleteCommand
+        {
+            get { return (ICommand)GetValue(DeleteCommandProperty); }
+            set { SetValue(DeleteCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty DeleteCommandProperty =
+            DependencyProperty.Register("DeleteCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
         public Transfer Transfer
         {
             get { return (Transfer)GetValue(TransferProperty); }

@@ -65,8 +65,9 @@ namespace EasySave.ViewModels
             if(parameter is Transfer transfer)
             {
                 Transfer? tr = Transfers.FirstOrDefault(t => transfer.Name == t.Name);
-                if (transfer is null || transfer.Id == tr.Id)
+                if (tr is null)
                     return true;
+                if(transfer.Id == tr.Id) return true;
             }
             return false;
         }

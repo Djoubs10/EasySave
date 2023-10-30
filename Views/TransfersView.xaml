@@ -17,7 +17,7 @@
                         ResumeCommand="{Binding DataContext.ResumeTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                         ModifyCommand="{Binding DataContext.ModifyTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                         SaveModificationCommand="{Binding DataContext.SaveTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        
+                        DeleteCommand="{Binding DataContext.DeleteTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                         Transfer="{Binding}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

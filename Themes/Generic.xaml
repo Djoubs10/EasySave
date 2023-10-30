@@ -168,6 +168,8 @@
 
                                     <!-- Delete button -->
                                     <Button
+                                        Command="{Binding DeleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
+                                        CommandParameter="{Binding}"
                                         Visibility="{Binding State, Converter={StaticResource StateToCanModifyOrDeleteTransferConverter}}"
                                         Style="{StaticResource DeleteButton}"/>
                                 </Grid>
