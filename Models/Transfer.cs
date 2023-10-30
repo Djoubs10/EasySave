@@ -10,6 +10,7 @@ namespace EasySave.Models
         Trasfering,
         Paused,
         Canceled,
+        Modifying,
         Finished
     }
     public class Transfer : Notify
@@ -33,7 +34,7 @@ namespace EasySave.Models
             Id = Guid.NewGuid().ToString();
             Name = name;
             Progress = 0;
-            State = States.Ready;
+            _state = States.Ready;
         }
         public void Start()
         {
@@ -52,7 +53,7 @@ namespace EasySave.Models
             State = States.Finished;
             Thread.Sleep(1000);
             Progress = 0;
-            _state = States.Ready;
+            State = States.Ready;
         }
     }
 }

@@ -10,7 +10,8 @@
             ItemsSource="{Binding Transfers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <customs:TransferControl 
+                    <customs:TransferControl
+                        StartCommand="{Binding DataContext.StartTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                         Transfer="{Binding}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
