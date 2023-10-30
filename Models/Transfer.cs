@@ -15,7 +15,7 @@ namespace EasySave.Models
     public class Transfer : Notify
     {
         private int _progress;
-
+        private States _state;
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -24,7 +24,10 @@ namespace EasySave.Models
             get => _progress;
             set { _progress = value; OnPropertyChanged(); }
         }
-        public States State { get; set; }
+        public States State {
+            get => _state;
+            set { _state = value; OnPropertyChanged();}
+        }
         public Transfer( string name)
         {
             Id = Guid.NewGuid().ToString();
@@ -49,7 +52,7 @@ namespace EasySave.Models
             State = States.Finished;
             Thread.Sleep(1000);
             Progress = 0;
-            State = States.Ready;
+            _state = States.Ready;
         }
     }
 }
