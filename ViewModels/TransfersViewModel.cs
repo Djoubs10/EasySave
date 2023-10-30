@@ -52,6 +52,7 @@ namespace EasySave.ViewModels
             if(parameter is Transfer transfer)
             {
                 Transfers.Remove(transfer);
+                LoadTransfers();
             }
         }
         private void CancelTransfer(object? parameter) {
@@ -89,7 +90,7 @@ namespace EasySave.ViewModels
                 return;
             }
             FilteredTransfers = new ObservableCollection<Transfer>(Transfers.Where((t) =>
-                t.Name.Contains(Search)
+                t.Name.ToLower().Contains(Search.ToLower())
             ));
         }
 
