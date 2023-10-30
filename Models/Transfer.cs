@@ -18,6 +18,7 @@ namespace EasySave.Models
         private int _progress;
         private States _state;
         private CancellationTokenSource _token;
+        private ManualResetEvent _pause;
         public string Id { get; set; }
         public string Name { get; set; }
         public int Progress
@@ -36,11 +37,22 @@ namespace EasySave.Models
             Progress = 0;
             _state = States.Ready;
             _token = new CancellationTokenSource(); 
+            _pause = new ManualResetEvent(false);
         }
         public void Cancel()
         {
             State = States.Canceled;
             _token.Cancel();
+        }
+        public void Pause()
+        {
+            State = States.Paused;
+            _pause.Set();
+        }
+        public void Resume()
+        {
+            State = States.Trasfering;
+            _pause.Reset();
         }
         public void Start()
         {
@@ -50,12 +62,10 @@ namespace EasySave.Models
             {
                 if (_token.Token.IsCancellationRequested)
                 {
-                    _token = new CancellationTokenSource();
-                    Thread.Sleep(1000);
-                    Progress = 0;
-                    State = States.Ready;
+                    Finish(true);
                     return;
                 }
+                _pause.WaitOne();
                 int rand = rnd.Next(1, 25);
                 if (Progress + rand > 100)
                     Progress = 100;
@@ -63,8 +73,18 @@ namespace EasySave.Models
                     Progress += rand;
                 Thread.Sleep(rnd.Next(500, 2000));
             }
-            
-            State = States.Finished;
+            Finish();
+        }
+        public void Finish(bool canceled = false)
+        {
+            if (canceled)
+            {
+                State = States.Canceled;
+                _token = new CancellationTokenSource();
+            }
+            else
+                State = States.Finished;
+            _pause = new ManualResetEvent(false);
             Thread.Sleep(1000);
             Progress = 0;
             State = States.Ready;
