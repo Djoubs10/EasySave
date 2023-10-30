@@ -13,6 +13,8 @@ namespace EasySave.ViewModels
         private ObservableCollection<Transfer> _transfers;
         public ObservableCollection<Transfer> Transfers { get => _transfers; set {  _transfers = value; OnPropertyChanged(); } }
         public ICommand StartTransferCommand { get; }
+        public ICommand CancelTransferCommand { get; }
+        public ICommand DeleteTransferCommand { get; }
         private void StartTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
@@ -21,7 +23,29 @@ namespace EasySave.ViewModels
                 t.Start();
             }
         }
-
+        private void ModifyTransfer(object? parameter)
+        {
+            if(parameter is Transfer transfer)
+            {
+                transfer.State = States.Modifying;
+            }
+        }
+        private void SaveModification(object? parameter)
+        {
+            if (parameter is Transfer transfer)
+                transfer.State = States.Ready;
+        }
+        private void DeleteTransfer(object? parameter)
+        {
+            if(parameter is Transfer transfer)
+            {
+                Transfers.Remove(transfer);
+            }
+        }
+        private void CancelTransfer(object? parameter) {
+            if (parameter is Transfer transfer)
+                transfer.Cancel();
+        }
         public TransfersViewModel()
         {
             _transfers = new ObservableCollection<Transfer>()
@@ -30,6 +54,8 @@ namespace EasySave.ViewModels
                 new Transfer("Transfer 2")
             };
             StartTransferCommand = new RelayCommand(StartTransfer);
+            CancelTransferCommand = new RelayCommand(CancelTransfer);
+            DeleteTransferCommand = new RelayCommand(DeleteTransfer);
         }
 
     }

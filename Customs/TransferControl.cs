@@ -17,7 +17,15 @@ namespace EasySave.Customs
         public static readonly DependencyProperty StartCommandProperty =
             DependencyProperty.Register("StartCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
 
+        public ICommand CancelCommand
+        {
+            get { return (ICommand)GetValue(CancelCommandProperty); }
+            set { SetValue(CancelCommandProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for StartCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CancelCommandProperty =
+            DependencyProperty.Register("CancelCommand", typeof(ICommand), typeof(TransferControl), new PropertyMetadata(null));
 
 
         public Transfer Transfer

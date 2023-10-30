@@ -17,7 +17,7 @@ namespace EasySave.Models
     {
         private int _progress;
         private States _state;
-
+        private CancellationTokenSource _token;
         public string Id { get; set; }
         public string Name { get; set; }
         public int Progress
@@ -35,6 +35,12 @@ namespace EasySave.Models
             Name = name;
             Progress = 0;
             _state = States.Ready;
+            _token = new CancellationTokenSource(); 
+        }
+        public void Cancel()
+        {
+            State = States.Canceled;
+            _token.Cancel();
         }
         public void Start()
         {
@@ -42,6 +48,14 @@ namespace EasySave.Models
             Random rnd = new Random();
             while (Progress < 100)
             {
+                if (_token.Token.IsCancellationRequested)
+                {
+                    _token = new CancellationTokenSource();
+                    Thread.Sleep(1000);
+                    Progress = 0;
+                    State = States.Ready;
+                    return;
+                }
                 int rand = rnd.Next(1, 25);
                 if (Progress + rand > 100)
                     Progress = 100;
