@@ -2,6 +2,7 @@
 using EasySave.Models;
 using System.CodeDom;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +18,8 @@ namespace EasySave.ViewModels
         public ICommand DeleteTransferCommand { get; }
         public ICommand PauseTransferCommand { get; }
         public ICommand ResumeTransferCommand { get; }
+        public ICommand ModifyTransferCommand { get; }
+        public ICommand SaveTransferCommand { get; }
         private void StartTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
@@ -46,6 +49,27 @@ namespace EasySave.ViewModels
             if (parameter is Transfer transfer)
                 transfer.Cancel();
         }
+        private void ModifyTransfer(object? parameter)
+        {
+            if (parameter is Transfer transfer)
+                transfer.State = States.Modifying;
+        }
+        private void SaveTransfer(object? parameter)
+        {
+            if (parameter is Transfer transfer)
+                transfer.State = States.Ready;
+        }
+
+        private bool CanSaveTransfer(object? parameter)
+        {
+            if(parameter is Transfer transfer)
+            {
+                Transfer? tr = Transfers.FirstOrDefault(t => transfer.Name == t.Name);
+                if (transfer is null || transfer.Id == tr.Id)
+                    return true;
+            }
+            return false;
+        }
         public TransfersViewModel()
         {
             _transfers = new ObservableCollection<Transfer>()
@@ -57,7 +81,9 @@ namespace EasySave.ViewModels
             CancelTransferCommand = new RelayCommand(CancelTransfer);
             DeleteTransferCommand = new RelayCommand(DeleteTransfer);
             PauseTransferCommand = new RelayCommand(PauseTransfer);
-            ResumeTransferCommand = new RelayCommand(ResumeTransfer);   
+            ResumeTransferCommand = new RelayCommand(ResumeTransfer);
+            ModifyTransferCommand = new RelayCommand(ModifyTransfer);
+            SaveTransferCommand = new RelayCommand(SaveTransfer, CanSaveTransfer);
         }
 
     }

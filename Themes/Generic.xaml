@@ -40,7 +40,7 @@
                                     Text="{Binding Name}"/>
                                 <TextBox 
                                     Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}" 
-                                    Text="{Binding Name, Mode=TwoWay}"/>
+                                    Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
 
                             <Grid
@@ -126,11 +126,15 @@
                                         Style="{StaticResource PlayButton}"/>
                                     <!-- Modify button -->
                                     <Button
+                                        Command="{Binding ModifyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
+                                        CommandParameter="{Binding}"
                                         Visibility="{Binding State, Converter={StaticResource StateToCanModifyOrDeleteTransferConverter}}"
                                         Style="{StaticResource ModifyButton}"/>
                                     
                                     <!-- Save button -->
                                     <Button
+                                        Command="{Binding SaveModificationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
+                                        CommandParameter="{Binding}"
                                         Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}"
                                         Style="{StaticResource SaveButton}"/>
                                 </Grid>
@@ -142,10 +146,6 @@
                                         Visibility="{Binding State, Converter={StaticResource StateToCanCancelTransferConverter}}"
                                         Style="{StaticResource RedCancelButton}"/>
 
-                                    <!-- Grey cancel button -->
-                                    <Button
-                                        Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}"
-                                        Style="{StaticResource GreyCancelButton}"/>
                                     <!-- Delete button -->
                                     <Button
                                         Visibility="{Binding State, Converter={StaticResource StateToCanModifyOrDeleteTransferConverter}}"
