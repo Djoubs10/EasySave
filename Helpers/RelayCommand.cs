@@ -9,6 +9,7 @@ namespace EasySave.Helpers
         private Func<object?, bool>? _canExecute;
 
         public event EventHandler? CanExecuteChanged
+
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
@@ -25,5 +26,6 @@ namespace EasySave.Helpers
             _execute = execute;
             _canExecute = canExecute;
         }
+
     }
 }
