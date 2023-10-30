@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vms="clr-namespace:EasySave.ViewModels"
     xmlns:v="clr-namespace:EasySave.Views"
+    WindowState="Maximized"
     mc:Ignorable="d"
     Width="1496" Height="1024"
     Background="#232428">
