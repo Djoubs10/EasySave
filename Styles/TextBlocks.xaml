@@ -7,11 +7,13 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="White" />
         <Setter Property="MaxWidth" Value="200"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
     <Style
         x:Key="BoldTextBlock"
         TargetType="{x:Type TextBlock}"
         BasedOn="{StaticResource TextBlock}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
     <Style

@@ -36,6 +36,7 @@
 
 
                             <Grid
+                                Margin="5 0"
                                 VerticalAlignment="Center">
                                 <TextBlock
                                     Style="{StaticResource BoldTextBlock}"
@@ -48,8 +49,9 @@
 
                             <StackPanel
                                 VerticalAlignment="Center"
+                                Margin="10 0"
                                 Orientation="Horizontal"
-                                Grid.Column="1">
+                                Grid.Column="1" >
                                 <TextBlock
                                     Style="{StaticResource BoldTextBlock}"
                                     Text="Source : "/>
@@ -65,6 +67,7 @@
                             </StackPanel>
 
                             <StackPanel
+                                Margin="10 0 15 0"
                                 VerticalAlignment="Center"
                                 Orientation="Horizontal"
                                 Grid.Column="2">
