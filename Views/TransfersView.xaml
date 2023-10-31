@@ -10,9 +10,10 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Buttons.xaml"/>
                 <ResourceDictionary Source="/Styles/TextBoxes.xaml"/>
                 <ResourceDictionary Source="/Styles/TextBlocks.xaml"/>
+                <ResourceDictionary Source="/Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="/Styles/ScrollBars.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
@@ -61,23 +62,29 @@
             NewTarget="{Binding NewTarget}"
             AddCommand="{Binding SaveNewTransferCommand}"
             Visibility="{Binding Add, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <ItemsControl
-            HorizontalAlignment="Center"
-            ItemsSource="{Binding FilteredTransfers}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <customs:TransferControl
-                        Margin="0 20"
-                        StartCommand="{Binding DataContext.StartTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        CancelCommand="{Binding DataContext.CancelTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        PauseCommand="{Binding DataContext.PauseTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        ResumeCommand="{Binding DataContext.ResumeTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        ModifyCommand="{Binding DataContext.ModifyTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        SaveModificationCommand="{Binding DataContext.SaveTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        DeleteCommand="{Binding DataContext.DeleteTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                        Transfer="{Binding}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer 
+            MaxHeight="800"
+            Focusable="False"
+            VerticalScrollBarVisibility="Visible"
+            Style="{StaticResource MyScrollViewer}">
+            <ItemsControl
+                HorizontalAlignment="Center"
+                ItemsSource="{Binding FilteredTransfers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <customs:TransferControl
+                                Margin="0 20"
+                                StartCommand="{Binding DataContext.StartTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                CancelCommand="{Binding DataContext.CancelTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                PauseCommand="{Binding DataContext.PauseTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                ResumeCommand="{Binding DataContext.ResumeTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                ModifyCommand="{Binding DataContext.ModifyTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                SaveModificationCommand="{Binding DataContext.SaveTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                DeleteCommand="{Binding DataContext.DeleteTransferCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                Transfer="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </StackPanel>
 </UserControl>
