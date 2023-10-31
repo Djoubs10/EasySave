@@ -1,6 +1,10 @@
 ﻿using EasySave.Helpers;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace EasySave.Models
@@ -12,7 +16,8 @@ namespace EasySave.Models
         Paused,
         Canceled,
         Modifying,
-        Finished
+        Finished,
+        Error
     }
     public class Transfer : Notify
     {
@@ -21,6 +26,8 @@ namespace EasySave.Models
         private string _name, _target, _source;
         private CancellationTokenSource _token;
         private ManualResetEvent _pause;
+        private static object _dirList = new object();
+        private static object _transferFile = new object();
         public string Id { get; set; }
         public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
         public string Source { get => _source; set { _source = value; OnPropertyChanged(); } }
@@ -61,28 +68,67 @@ namespace EasySave.Models
         }
         public void Start()
         {
-            State = States.Trasfering;
-            Random rnd = new Random();
-            while (Progress < 100)
+            if (!Directory.Exists(Source))
             {
-                Thread.Sleep(rnd.Next(500, 2000));
+                State = States.Error;
+                Finish();
+                return;
+            }
+            if (!Directory.Exists(Target))
+            {
+                Directory.CreateDirectory(Target);
+            }
+            State = States.Trasfering;
+            List<string> files = ListFiles(Source);
+            for(int i = 0; i < files.Count; i++)
+            {
                 _pause.WaitOne();
                 if (_token.Token.IsCancellationRequested)
                 {
-                    Finish(true);
+                    Finish();
                     return;
                 }
-                int rand = rnd.Next(1, 25);
-                if (Progress + rand > 100)
-                    Progress = 100;
-                else 
-                    Progress += rand;
+                string sourceFile = files[i];
+                string targetFile = Target + sourceFile.Substring(Source.Length);
+                try
+                {
+                    lock (_transferFile)
+                    {
+                        string? dir = Path.GetDirectoryName(targetFile);
+                        if (dir is null)
+                            return;
+                        if (!Directory.Exists(dir))
+                        {
+                            Directory.CreateDirectory(dir);
+                        }
+                        File.Copy(sourceFile, targetFile, true);
+                    }
+                } catch (UnauthorizedAccessException) { }
+                finally
+                {
+                    Progress = (int)Math.Floor((double)i / files.Count * 100);
+                }
             }
+            State = States.Finished;
             Finish();
         }
-        public void Finish(bool canceled = false)
+
+        private List<string> ListFiles(string directory)
         {
-            State = canceled ? States.Canceled : States.Finished;
+            List<string> files = new List<string>();
+            lock (_dirList)
+            {
+                 files.AddRange(Directory.GetFiles(directory));
+                foreach (string dir in Directory.GetDirectories(directory))
+                {
+                    files.AddRange(ListFiles(dir));
+                }
+            }
+
+            return files;
+        }
+        public void Finish()
+        {
             _token = new CancellationTokenSource();
             _pause = new ManualResetEvent(true);
             Thread.Sleep(1000);

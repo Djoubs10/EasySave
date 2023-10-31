@@ -16,6 +16,8 @@
     <converters:StateToForegroundProgressColor x:Key="StateToForegroundProgressColor"/>
     <converters:StateToDisplayProgressConverter x:Key="StateToDisplayProgressConverter"/>
     <converters:StateToCanResumeTransferConverter x:Key="StateToCanResumeTransferConverter"/>
+    <converters:StateToErrorMessageVisibility x:Key="StateToErrorMessageVisibility"/>
+    <converters:StateToFinishMessageVisibility x:Key="StateToFinishMessageVisibility"/>
     <Style TargetType="{x:Type customs:TransferControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -122,11 +124,15 @@
                                 </StackPanel>
 
                             </StackPanel>
-                            <StackPanel
+                            <Grid
                                 VerticalAlignment="Center"
-                                Grid.Column="4"
-                                Orientation="Horizontal">
-                                <Grid Margin="5 0">
+                                Grid.Column="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Margin="5 0" Grid.Column="0">
                                     <!--  Play button -->
                                     <Button 
                                         Visibility="{Binding State, Converter={StaticResource StateToCanPlayConverter}}"
@@ -134,7 +140,7 @@
                                         CommandParameter="{Binding}"
                                         Style="{StaticResource PlayButton}"/>
                                 </Grid>
-                                <Grid Margin="5 0">
+                                <Grid Margin="5 0" Grid.Column="1">
                                     <!-- Pause button -->
                                     <Button
                                         Command="{Binding PauseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
@@ -161,7 +167,7 @@
                                         Visibility="{Binding State, Converter={StaticResource StateToCanSaveOrCancelModificationConverter}}"
                                         Style="{StaticResource SaveButton}"/>
                                 </Grid>
-                                <Grid Margin="5 0">
+                                <Grid Margin="5 0" Grid.Column="2">
                                     <!-- Red cancel button -->
                                     <Button
                                         Command="{Binding CancelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type customs:TransferControl}}}"
@@ -176,8 +182,21 @@
                                         Visibility="{Binding State, Converter={StaticResource StateToCanModifyOrDeleteTransferConverter}}"
                                         Style="{StaticResource DeleteButton}"/>
                                 </Grid>
-
-                            </StackPanel>
+                                <TextBlock 
+                                    Foreground="Red" FontSize="20" FontWeight="DemiBold"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    Height="auto" TextWrapping="Wrap" TextAlignment="Center"
+                                    Visibility="{Binding State, Converter={StaticResource StateToErrorMessageVisibility}}"
+                                    Grid.ColumnSpan="3"
+                                    Text="Source direcoty not found."/>
+                                <TextBlock 
+                                    Foreground="Green" 
+                                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    Visibility="{Binding State, Converter={StaticResource StateToFinishMessageVisibility}}"
+                                    Grid.ColumnSpan="3"
+                                    FontSize="20" FontWeight="DemiBold"
+                                    Text="Finished !"  />
+                            </Grid>
 
                         </Grid>
                         
