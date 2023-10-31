@@ -20,7 +20,7 @@ namespace EasySave.ViewModels
             get => _filteredTransfers;
             set { _filteredTransfers = value; OnPropertyChanged(); }
         }
-        public ObservableCollection<Transfer> Transfers { get => _transfers; set {  _transfers = value; OnPropertyChanged(); LoadTransfers();            }
+        public ObservableCollection<Transfer> Transfers { get => _transfers; set {  _transfers = value; OnPropertyChanged(); LoadTransfers(); }
         }
         public ICommand StartTransferCommand { get; }
         public ICommand CancelTransferCommand { get; }
