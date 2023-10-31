@@ -14,7 +14,10 @@
                 <ResourceDictionary Source="/Styles/TextBoxes.xaml"/>
                 <ResourceDictionary Source="/Styles/TextBlocks.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
         </ResourceDictionary>
+        
     </UserControl.Resources>
     <StackPanel >
         <TextBlock
@@ -37,17 +40,29 @@
                     Margin="25"
                     Command="{Binding StartAllTransfersCommand}"
                     Style="{StaticResource PlayButton}"/>
-                <Button
-                    Margin="25"
-                    Style="{StaticResource PlusButton}"/>
+                <Grid Margin="25">
+                    <Button
+                        Command="{Binding AddTransferCommand}"
+                        Style="{StaticResource PlusButton}"/>
+                    <Button 
+                        Command="{Binding CancelAddTransferCommand}"
+                        Visibility="{Binding Add, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Style="{StaticResource GreyCancelButton}"/>
+                </Grid>
                 <Button
                     Margin="25"
                     Command="{Binding CancelAllTransfersCommand}"
                     Style="{StaticResource RedCancelButton}"/>
             </StackPanel>
         </Grid>
-        
+        <customs:AddTransferControl 
+            NewName="{Binding NewName}"
+            NewSource="{Binding NewSource}"
+            NewTarget="{Binding NewTarget}"
+            AddCommand="{Binding SaveNewTransferCommand}"
+            Visibility="{Binding Add, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <ItemsControl
+            HorizontalAlignment="Center"
             ItemsSource="{Binding FilteredTransfers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

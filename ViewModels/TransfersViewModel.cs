@@ -4,6 +4,7 @@ using System.CodeDom;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,6 +14,12 @@ namespace EasySave.ViewModels
     {
         private ObservableCollection<Transfer> _transfers;
         private ObservableCollection<Transfer> _filteredTransfers;
+        private string _newName = "", _newSource = "", _newTarget = "";
+        public string NewName { get => _newName; set { _newName = value; OnPropertyChanged(); } }
+        public string NewSource { get => _newSource; set { _newSource = value; OnPropertyChanged(); } }
+        public string NewTarget { get => _newTarget; set { _newTarget = value; OnPropertyChanged(); } }
+        private bool _add = false;
+        public bool Add { get => _add; set { _add = value; OnPropertyChanged(); } }
         private string _search = "";
         public string Search { get => _search; set { _search = value; OnPropertyChanged(); LoadTransfers(); } }
         public ObservableCollection<Transfer> FilteredTransfers
@@ -31,6 +38,9 @@ namespace EasySave.ViewModels
         public ICommand SaveTransferCommand { get; }    
         public ICommand StartAllTransfersCommand { get; }    
         public ICommand CancelAllTransfersCommand { get; }    
+        public ICommand AddTransferCommand { get; }    
+        public ICommand SaveNewTransferCommand { get; }
+        public ICommand CancelAddTransferCommand { get; }
         private void StartTransfer(object? parameter)
         {
             if(parameter is Transfer transfer)
@@ -79,10 +89,9 @@ namespace EasySave.ViewModels
         {
             if(parameter is Transfer transfer)
             {
-                Transfer? tr = Transfers.FirstOrDefault(t => transfer.Name == t.Name);
+                Transfer? tr = Transfers.FirstOrDefault(t => transfer.Name == t.Name && t.Id != transfer.Id);
                 if (tr is null)
                     return true;
-                if(transfer.Id == tr.Id) return true;
             }
             return false;
         }
@@ -103,7 +112,9 @@ namespace EasySave.ViewModels
             foreach(Transfer t in FilteredTransfers)
             {
                 if(t.State == States.Ready)
+                {                        
                     new Thread(t.Start).Start();
+                }
             }
         }
 
@@ -111,18 +122,26 @@ namespace EasySave.ViewModels
         {
             foreach(Transfer t in FilteredTransfers)
             {
-                if (t.State != States.Ready)
+                if (t.State != States.Ready && t.State != States.Modifying)
                     t.Cancel();
             }
         }
+        private void SaveNewTransfer(object? _)
+        {
+            if(NewName != "" && Transfers.FirstOrDefault(t => t.Name == NewName) == null)
+            {
+                Transfers.Insert(0,new Transfer(NewName, NewSource, NewTarget));
+                NewName = ""; NewSource = ""; NewTarget = "";
+                Add = false;
+                LoadTransfers();
+            }
+        }
+        private bool CanSaveNewTransfer(object? _)
+            => (NewName != "" && Transfers.FirstOrDefault(t => t.Name == NewName) == null);
 
         public TransfersViewModel()
         {
-            _transfers = new ObservableCollection<Transfer>()
-            {
-                new Transfer("Transfer 1","",""),
-                new Transfer("Transfer 2","","")
-            };
+            _transfers = new ObservableCollection<Transfer>() { new Transfer("Transfer 1","",""), new Transfer("Transfer 2","","") };
             _filteredTransfers = _transfers;
             StartTransferCommand = new RelayCommand(StartTransfer);
             CancelTransferCommand = new RelayCommand(CancelTransfer);
@@ -133,6 +152,9 @@ namespace EasySave.ViewModels
             SaveTransferCommand = new RelayCommand(SaveTransfer, CanSaveTransfer);
             StartAllTransfersCommand = new RelayCommand(StartAllTransfers);
             CancelAllTransfersCommand = new RelayCommand(CancelAllTransfers);
+            AddTransferCommand = new RelayCommand((object? _) => { Add = true; Search = ""; }, (object? _) => { return !Add; });
+            CancelAddTransferCommand = new RelayCommand((object? _) => { Add = false; Search = ""; NewName = ""; NewSource = ""; NewTarget = ""; }, (object? _) => { return  Add; });
+            SaveNewTransferCommand = new RelayCommand(SaveNewTransfer, CanSaveNewTransfer);
         }
 
     }

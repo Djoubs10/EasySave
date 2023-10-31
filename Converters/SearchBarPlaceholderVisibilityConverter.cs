@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace EasySave.Converters
@@ -9,9 +10,9 @@ namespace EasySave.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is string search)
+            if(value is string content)
             {
-                if (search.Length > 0)
+                if (content.Length > 0)
                     return Visibility.Hidden;
             }
             return Visibility.Visible;
