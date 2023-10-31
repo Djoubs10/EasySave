@@ -141,7 +141,7 @@ namespace EasySave.ViewModels
 
         public TransfersViewModel()
         {
-            _transfers = new ObservableCollection<Transfer>() { new Transfer("Transfer 1","",""), new Transfer("Transfer 2","","") };
+            _transfers = new ObservableCollection<Transfer>() { new Transfer("Transfer 1", "C:\\Users\\ndjoubri\\Desktop\\dev_p\\EasySave", "C:\\Users\\ndjoubri\\Desktop\\Copy\\EasySaveCopy"), new Transfer("Transfer 2","","") };
             _filteredTransfers = _transfers;
             StartTransferCommand = new RelayCommand(StartTransfer);
             CancelTransferCommand = new RelayCommand(CancelTransfer);

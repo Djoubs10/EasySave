@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Security;
+using System.Security.AccessControl;
+using System.Security.Permissions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -101,9 +104,12 @@ namespace EasySave.Models
                         {
                             Directory.CreateDirectory(dir);
                         }
+                        
                         File.Copy(sourceFile, targetFile, true);
                     }
-                } catch (UnauthorizedAccessException) { }
+                } catch (UnauthorizedAccessException ex) {
+                    Debug.WriteLine(sourceFile + " --- " + targetFile + " --- " +ex.Message);
+                }
                 finally
                 {
                     Progress = (int)Math.Floor((double)i / files.Count * 100);
@@ -118,7 +124,11 @@ namespace EasySave.Models
             List<string> files = new List<string>();
             lock (_dirList)
             {
-                 files.AddRange(Directory.GetFiles(directory));
+                foreach (string _file in Directory.GetFiles(directory))
+                {
+                    if (HasFilePermission(_file))
+                        files.Add(_file);
+                }
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
                     files.AddRange(ListFiles(dir));
@@ -126,6 +136,28 @@ namespace EasySave.Models
             }
 
             return files;
+        }
+
+        private bool HasFilePermission(string file)
+        {
+            FileInfo fileInfos = new FileInfo(file);
+            if (File.Exists(file))
+            {
+                FileSecurity fileSecurity = fileInfos.GetAccessControl();
+                AuthorizationRuleCollection rules = fileSecurity.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+                foreach (FileSystemAccessRule rule in rules)
+                {
+                    if (rule.FileSystemRights.HasFlag(FileSystemRights.ReadData) &&
+                        rule.AccessControlType == AccessControlType.Allow)
+                    {
+                        // Vous avez l'autorisation de lire le fichier.
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+
         }
         public void Finish()
         {
