@@ -17,7 +17,7 @@ namespace EasySave.Converters
         {
             if(value is States state)
             {
-                if(state == States.Error) 
+                if(state == States.SourceNotFound) 
                     return Visibility.Visible;
             }
             return Visibility.Collapsed;

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security;
 using System.Security.AccessControl;
 using System.Security.Permissions;
@@ -20,7 +21,8 @@ namespace EasySave.Models
         Canceled,
         Modifying,
         Finished,
-        Error
+        Error,
+        SourceNotFound
     }
     public class Transfer : Notify
     {
@@ -73,14 +75,12 @@ namespace EasySave.Models
         {
             if (!Directory.Exists(Source))
             {
-                State = States.Error;
+                State = States.SourceNotFound;
                 Finish();
                 return;
             }
             if (!Directory.Exists(Target))
-            {
                 Directory.CreateDirectory(Target);
-            }
             State = States.Trasfering;
             List<string> files = ListFiles(Source);
             for(int i = 0; i < files.Count; i++)
@@ -88,28 +88,13 @@ namespace EasySave.Models
                 _pause.WaitOne();
                 if (_token.Token.IsCancellationRequested)
                 {
-                    Finish();
+                    Finish() ;
                     return;
                 }
-                string sourceFile = files[i];
-                string targetFile = Target + sourceFile.Substring(Source.Length);
                 try
                 {
-                    lock (_transferFile)
-                    {
-                        string? dir = Path.GetDirectoryName(targetFile);
-                        if (dir is null)
-                            return;
-                        if (!Directory.Exists(dir))
-                        {
-                            Directory.CreateDirectory(dir);
-                        }
-                        
-                        File.Copy(sourceFile, targetFile, true);
-                    }
-                } catch (UnauthorizedAccessException ex) {
-                    Debug.WriteLine(sourceFile + " --- " + targetFile + " --- " +ex.Message);
-                }
+                    CopyFile(files[i], Target + files[i].Substring(Source.Length));
+                } catch { }
                 finally
                 {
                     Progress = (int)Math.Floor((double)i / files.Count * 100);
@@ -124,40 +109,28 @@ namespace EasySave.Models
             List<string> files = new List<string>();
             lock (_dirList)
             {
-                foreach (string _file in Directory.GetFiles(directory))
-                {
-                    if (HasFilePermission(_file))
-                        files.Add(_file);
-                }
+                files.AddRange(Directory.GetFiles(directory));
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
                     files.AddRange(ListFiles(dir));
                 }
             }
-
             return files;
         }
 
-        private bool HasFilePermission(string file)
+        private void CopyFile(string source, string target)
         {
-            FileInfo fileInfos = new FileInfo(file);
-            if (File.Exists(file))
+            lock (_transferFile)
             {
-                FileSecurity fileSecurity = fileInfos.GetAccessControl();
-                AuthorizationRuleCollection rules = fileSecurity.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
-                foreach (FileSystemAccessRule rule in rules)
-                {
-                    if (rule.FileSystemRights.HasFlag(FileSystemRights.ReadData) &&
-                        rule.AccessControlType == AccessControlType.Allow)
-                    {
-                        // Vous avez l'autorisation de lire le fichier.
-                        return true;
-                    }
-                }
+                string? dir = Path.GetDirectoryName(target);
+                if (dir is null)
+                    return;
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+
+                if (!(File.Exists(target) && new FileInfo(target).IsReadOnly))
+                    File.Copy(source, target, true);
             }
-            return false;
-
-
         }
         public void Finish()
         {
