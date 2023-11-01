@@ -188,7 +188,7 @@
                                     Height="auto" TextWrapping="Wrap" TextAlignment="Center"
                                     Visibility="{Binding State, Converter={StaticResource StateToErrorMessageVisibility}}"
                                     Grid.ColumnSpan="3"
-                                    Text="Source direcoty not found."/>
+                                    Text="Source directory not found."/>
                                 <TextBlock 
                                     Foreground="Green" 
                                     VerticalAlignment="Center" HorizontalAlignment="Center"
